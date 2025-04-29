@@ -2,6 +2,7 @@
 
 import { id, i, init, InstaQLEntity } from "@instantdb/react";
 
+
 // ID for app: Not relevant
 const APP_ID = "a4beedf5-1789-42f7-9926-02b2de7947b4";
 
@@ -18,7 +19,10 @@ const schema = i.schema({
 
 type Todo = InstaQLEntity<typeof schema, "todos">;
 
-const db = init({ appId: APP_ID, schema });
+const db = init({
+  appId: process.env.NEXT_PUBLIC_INSTANT_APP_ID!,
+  schema,
+});
 
 function App() {
   // Read Data
