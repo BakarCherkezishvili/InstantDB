@@ -1,6 +1,36 @@
 // instant.schema.ts
 
 import { i } from '@instantdb/react';
+import { init, id } from '@instantdb/react';
+
+const db = init({
+  appId: process.env.NEXT_PUBLIC_INSTANT_APP_ID!,
+});
+
+db.transact(db.tx.goals[id()].update({ title: 'eat' }));
+
+db.transact(
+  db.tx.goals[id()].update({
+    priority: 'none',
+    isSecret: true,
+    value: 10,
+    aList: [1, 2, 3],
+    anObject: { foo: 'bar' },
+  }),
+);
+
+db.transact(
+  db.tx.goals[id()].update({
+    title: ['eat', 'sleep', 'hack', 'repeat'][Math.floor(Math.random() * 4)],
+  }),
+);
+
+const eatId = id();
+db.transact(
+  db.tx.goals[eatId].update({ priority: 'top', lastTimeEaten: 'Yesterday' }),
+);
+
+db.transact(db.tx.goals[eatId].update({ lastTimeEaten: 'Today' }));
 
 const _schema = i.schema({
   entities: {
@@ -50,7 +80,7 @@ const _schema = i.schema({
 
 // This helps Typescript display better intellisense
 type _AppSchema = typeof _schema;
-interface AppSchema extends _AppSchema {}
+interface AppSchema extends _AppSchema { }
 const schema: AppSchema = _schema;
 
 export type { AppSchema };
